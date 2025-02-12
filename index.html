@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Специально для Вики</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
+            transition: background 0.5s ease;
+            cursor: pointer;
+        }
+
+        #loginContainer {
+            text-align: center;
+            color: white;
+        }
+
+        #mainContent {
+            text-align: center;
+            color: white;
+            font-size: 24px;
+            padding: 20px;
+            max-width: 600px;
+        }
+
+        #textContainer {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 15% auto;
+            padding: 20px;
+            width: 300px;
+            border: 1px solid #888;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            background: #f0f0f0;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .modal-footer {
+            padding: 10px;
+            text-align: right;
+        }
+
+        button {
+            padding: 5px 15px;
+            cursor: pointer;
+        }
+
+        input {
+            padding: 8px;
+            margin: 10px;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div id="loginContainer">
+        <h2>Укажите свое имя</h2>
+        <input type="text" id="nameInput">
+        <button onclick="checkName()">Войти</button>
+    </div>
+
+    <div id="mainContent" style="display: none;">
+        <div id="textContainer"></div>
+    </div>
+
+    <div id="errorModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Ошибка</h3>
+            </div>
+            <div class="modal-body">
+                <p>Доступ ЗАПРЕЩЕН</p>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const monologue = [
+            "привет",
+            "сегодня ты узнаешь....",
+            "...один секрет...",
+            "но не пугайся, этот секрет не страшный",
+            "в общем хочу сказать что...",
+            "как ты вообще держишься так долго нажимать...",
+            "нет серьезно, тебе не надоело?",
+            "просто уже много времени прошло, могла заниматься чем то важным",
+            "нет серьезно остановись, займись делами",
+            "Вика, я вижу тебя через камеру телефона",
+            "Давай иди делай дела",
+            "Какая ты упорная...",
+            "Все, не тыкай",
+            "Нет серьезно не тыкай",
+            "НЕ ТЫКАЙ.",
+            "!!!",
+            "шучу, я просто хотел показать тебе что ты упорная и всего добьешься...",
+            "и...",
+            "я...",
+            "я просто хотел сказать",
+            "что...",
+            "я люблю тебя!",
+            "да, я люблю тебя",
+            "Я ЛЮБЛЮ ТЕБЯ!"
+        ];
+
+        let currentStep = 0;
+        const startColor = [51, 51, 51];
+        const endColor = [255, 105, 180];
+
+        function calculateBackground(step) {
+            const totalSteps = monologue.length - 1;
+            const r = startColor[0] + (endColor[0] - startColor[0]) * (step / totalSteps);
+            const g = startColor[1] + (endColor[1] - startColor[1]) * (step / totalSteps);
+            const b = startColor[2] + (endColor[2] - startColor[2]) * (step / totalSteps);
+            return `rgb(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)})`;
+        }
+
+        function checkName() {
+            const name = document.getElementById('nameInput').value.trim().toLowerCase();
+            const allowedNames = ['вика', 'vika', 'vikki'];
+            
+            if (allowedNames.includes(name)) {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+                document.getElementById('textContainer').textContent = monologue[0];
+                document.body.style.backgroundColor = calculateBackground(0);
+                currentStep = 1;
+            } else {
+                document.getElementById('errorModal').style.display = 'block';
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('errorModal').style.display = 'none';
+        }
+
+        document.getElementById('textContainer')?.addEventListener('click', function() {
+            if (currentStep < monologue.length) {
+                this.textContent = monologue[currentStep];
+                document.body.style.backgroundColor = calculateBackground(currentStep);
+                currentStep++;
+            }
+        });
+    </script>
+</body>
+</html>
