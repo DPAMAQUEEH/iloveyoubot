@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Специально для Вики</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
@@ -11,9 +12,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Press Start 2P', cursive;
             transition: background 0.5s ease;
             cursor: pointer;
+            line-height: 1.5;
         }
 
         #loginContainer {
@@ -24,7 +26,7 @@
         #mainContent {
             text-align: center;
             color: white;
-            font-size: 24px;
+            font-size: 16px;
             padding: 20px;
             max-width: 600px;
         }
@@ -35,7 +37,7 @@
 
         @keyframes float {
             0% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+            50% { transform: translateY(-10px); }
             100% { transform: translateY(0px); }
         }
 
@@ -56,6 +58,7 @@
             width: 300px;
             border: 1px solid #888;
             box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            font-family: 'Press Start 2P', cursive;
         }
 
         .modal-header {
@@ -69,15 +72,45 @@
             text-align: right;
         }
 
+        button, input {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+        }
+
         button {
-            padding: 5px 15px;
+            padding: 10px 20px;
             cursor: pointer;
+            background: #4CAF50;
+            border: none;
+            color: white;
         }
 
         input {
-            padding: 8px;
-            margin: 10px;
-            width: 200px;
+            padding: 10px;
+            margin: 15px 0;
+            width: 250px;
+            background: #333;
+            color: white;
+            border: 2px solid #666;
+        }
+
+        .heart {
+            position: fixed;
+            bottom: -50px;
+            font-size: 24px;
+            animation: floatUp 4s linear forwards;
+            opacity: 0.8;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
         }
     </style>
 </head>
@@ -131,12 +164,16 @@
             "что...",
             "я люблю тебя!",
             "да, я люблю тебя",
-            "Я ЛЮБЛЮ ТЕБЯ!"
+            "Я ЛЮБЛЮ ТЕБЯ!",
+            "С днем влюбленных❤️"
         ];
 
         let currentStep = 0;
         const startColor = [51, 51, 51];
         const endColor = [255, 105, 180];
+
+        let heartsInterval;
+        const heartEmojis = ['❤️', '💖', '💕', '💞', '💓', '💗'];
 
         function calculateBackground(step) {
             const totalSteps = monologue.length - 1;
@@ -170,8 +207,30 @@
                 this.textContent = monologue[currentStep];
                 document.body.style.backgroundColor = calculateBackground(currentStep);
                 currentStep++;
+
+                if (currentStep === monologue.length) {
+                    startHeartsAnimation();
+                }
             }
         });
+
+        function startHeartsAnimation() {
+            heartsInterval = setInterval(createHeart, 300);
+            setTimeout(() => clearInterval(heartsInterval), 100000);
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.fontSize = Math.random() * 20 + 24 + 'px';
+            
+            document.body.appendChild(heart);
+            
+            // Удаляем сердечко после анимации
+            setTimeout(() => heart.remove(), 4000);
+        }
     </script>
 </body>
 </html>
